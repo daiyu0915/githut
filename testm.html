@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>React Test</title>
+    <link type="text/css" rel="styleSheet" href="css/git.css" />
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+</head>
+
+<body>
+    <div id="container"></div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- babel是解析JSX必备的库 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+
+        class Tab extends React.Component {
+            constructor() {
+                super()
+                this.state = {
+                    n: [
+                        'ruby',
+                        'javascript',
+                        'undefined',
+                        'java',
+                        'css',
+                        'python'
+                    ],
+                    
+                    currentIndex: 0
+                };
+
+            }
+            componentDidMount(){
+            change(index) {
+                this.setState({
+                    currentIndex: index
+                })
+                console.log(this.state.currentIndex)
+            }
+        }
+
+            render() {   
+               
+                  
+                const tablist = this.state.n.map((item, index) => {
+                    return (
+                        <div className="headerbar" >
+                         <span key={index} className={index === this.state.currentIndex ? 'state-active' : ''} onClick={() => { this.change(index) }}>{item}</span>   
+                                             
+                        </div>
+                    );
+                })
+                return(
+                    <div>
+                    {tablist}
+                    <CSS n={this.state.n.slice(this.state.currentIndex,1)} /> 
+                    </div>
+
+                )
+                
+            
+                
+            }
+        }
+
+
+
+        // class Menu extends React.Component {
+        //     constructor(props) {
+        //         super(props);
+        //         this.state = {
+        //             tab: [
+        //                 { name: 'All' },
+        //                 { name: 'Javascript' },
+        //                 { name: 'Ruby' },
+        //                 { name: 'Java' },
+        //                 { name: 'CSS' },
+        //                 { name: 'Python' }
+        //             ],
+        //         }
+        //     }
+        //     render() {
+        //         const { onClick, current } = this.props;
+        //         const tablist = this.state.tab.map((item, index) => {
+        //             <li><a href="${}" onClick={() => onClick(item.name)} style={current == item.query ? { 'color': 'red' } : { color: 'black' }}>{item.name}</a></li>
+
+        //         });
+        //         return
+        //         <ul>
+        //             {tablist}
+        //         </ul>
+        //     }
+
+        // }
+
+
+
+        class CSS extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = { myDate: [] };
+            }
+
+            async componentDidMount() {
+                const n = this.props.n
+                console.log(n)
+                const url = `https://api.github.com/search/repositories?q=stars:%3E1+language:${n}&sort=stars&order=desc&type=Repositories`
+                const res = await axios.get(url)
+                console.log('res', res.data)
+                this.setState({
+                    myDate: res.data.items
+                });
+            }
+            render() {
+                const list = this.state.myDate.slice(0, 10).map((item, key) => {
+                    return <div className="card" ><div className='it' key={item.id}>
+                        <div className="num">#{key + 1}</div>
+                        <div className="img"><img src={item.owner.avatar_url} style={{ width: '150px', height: '150px' }} /></div>
+                        <div className="name"><a href={item.html_url}>{item.name}</a></div>
+                        <div className="desc">
+                            <div>
+                                <i className="fa fa-user" id="u"></i>
+                                <a href={item.owner.html_url}>{item.name}</a>
+                            </div>
+                            <div>
+                                <i className="fa fa-star" id="s"></i>
+                                <span>{item.stargazers_count}  stars</span>
+                            </div>
+                            <div>
+                                <i className="fa fa-code-fork" id="c" ></i>
+                                <span>{item.forks_count} forks</span>
+                            </div>
+                            <div>
+                                <i className="fa fa-exclamation-triangle" id="t" ></i>
+                                <span>{item.open_issues_count}  open_issues</span>
+                            </div>
+                        </div>
+                    </div></div>
+                })
+                return (
+                    
+                    <div >
+                        <div className="content">
+                            {list}
+                        </div>
+                    </div>
+
+                )
+            }
+        }
+
+        // class App extends React.Component {
+        //     render() {
+        //         return <div>
+        //             <Tab />
+        //         </div>;
+        //     }
+        // }
+        ReactDOM.render(
+            <Tab />,
+            document.getElementById('container')
+        );
+    </script>
+</body>
+
+</html>
