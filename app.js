@@ -81,7 +81,7 @@ class Content extends React.Component {
         const cards = this.state.items.slice(0, 10).map((item, key) => {
             return <div className="card" ><div className='it' key={item.id}>
                 <div className="num">#{key + 1}</div>
-                <div className="img"><img src={item.owner.avatar_url}  style={{ width: '150px', height: '150px', }} /></div>
+                <div className="img"><img src={item.owner.avatar_url}  style={{ width: '150px', height: '150px', }}/></div>
                 <div className="name"><a href={item.html_url}>{item.name}</a></div>
                 <div className="desc">
                     <div>
