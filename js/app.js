@@ -12,7 +12,7 @@ class Menu extends React.Component {
             { title: 'Python', query: 'python' },
         ];
         const list = links.map((item, key) =>
-            <div className="head" key={key}><a href={`?q=${item.query}`} onClick={() => onClick(item.query)} style={current == item.query ? { color: 'red' } : { color: 'black' }}>{item.title}</a></div>
+            <div className="head" key={key}><a href={`/?q=${item.query}`} onClick={() => onClick(item.query)} style={current == item.query ? { color: 'red' } : { color: 'black' }}>{item.title}</a></div>
         );
         return <ul id="headbar">
             {list}
