@@ -12,7 +12,7 @@ class Menu extends React.Component {
             { title: 'Python', query: 'python' },
         ];
         const list = links.map((item, key) =>
-            <div className="head" key={key}><a href={`/?q=${item.query}`} onClick={() => onClick(item.query)} style={current == item.query ? { 'color': 'red' } : { color: 'black' }}>{item.title}</a></div>
+            <div className="head" key={key}><a href={`//?q=${item.query}`} onClick={() => onClick(item.query)} style={current == item.query ? { color: 'red' } : { color: 'black' }}>{item.title}</a></div>
         );
         return <ul id="headbar">
             {list}
@@ -36,16 +36,47 @@ class Loading extends React.Component {
     }
 }
 
+
+class ImageWithStatusText extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { imageStatus: null };
+    }
+   
+    handleImageLoaded() {
+      this.setState({ imageStatus: 'loaded' });
+    }
+   
+    handleImageErrored() {
+      this.setState({ imageStatus: 'failed to load' });
+    }
+   
+    render() {
+      return (
+        <div>
+          <img
+            src={this.props.loading.gif}
+            onLoad={this.handleImageLoaded.bind(this)}
+            onError={this.handleImageErrored.bind(this)}
+            />
+          {this.state.imageStatus}
+        </div>
+      );
+    }
+  }
+
+
+
 class Content extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
-            items:[],
+            items: [],
         };
     }
     componentDidMount() {
-        this.search();    
+        this.search();
     };
 
     search = async () => {
@@ -81,7 +112,7 @@ class Content extends React.Component {
         const cards = this.state.items.slice(0, 10).map((item, key) => {
             return <div className="card" ><div className='it' key={item.id}>
                 <div className="num">#{key + 1}</div>
-                <div className="img"><img src={item.owner.avatar_url}  style={{ width: '150px', height: '150px', }}/></div>
+                <div className="img"><img src={item.owner.avatar_url} style={{ width: '150px', height: '150px',}} /></div>
                 <div className="name"><a href={item.html_url}>{item.name}</a></div>
                 <div className="desc">
                     <div>
@@ -105,6 +136,7 @@ class Content extends React.Component {
         })
         return <div className="content">
             {loading ? <Loading /> : cards}
+
         </div>;
     }
 }

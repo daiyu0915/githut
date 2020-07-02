@@ -22,7 +22,7 @@ font-size: 22px;
     }
 .card{
     display: flex;
-    width:400px;
+    width:23%;
     background-color:#faf9f5;
     justify-content: space-around;
     margin-left:auto;
