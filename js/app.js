@@ -98,7 +98,18 @@ class Content extends React.Component {
     };
 
     search = async () => {
-        var q = window.location.search.split("=").slice(1).toString();
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
+            var context = "";
+            if (r != null)
+                context = r[2];
+            reg = null;
+            r = null;
+            return context == null || context == "" || context == "undefined" ? "" : context;
+        }
+        console.log(GetQueryString("q"));
+        const q = GetQueryString("q");
         const url = `https://api.github.com/search/repositories?q=stars:>1+language:${q}&sort=stars&order=desc&type=Repositories`;
         console.log('url', url);
         this.setState({ loading: true })
