@@ -11,8 +11,14 @@ class Menu extends React.Component {
             { title: 'CSS', query: 'css' },
             { title: 'Python', query: 'python' },
         ];
+
+        var r = window.location.search.split("=").slice(1).toString();
+        console.log(r)
+
+        
+        
         const list = links.map((item, key) =>
-            <div className="head" key={key}><a href={`/?q=${item.query}`} onClick={() => onClick(item.query)} style={current == item.query ? { color: 'red' } : { color: 'black' }}>{item.title}</a></div>
+            <div  key={key} ><a href={`/?q=${item.query}`} style={{color:r == item.query ? 'red':'black'}} >{item.title}</a></div>
         );
         return <ul id="headbar">
             {list}
@@ -37,33 +43,45 @@ class Loading extends React.Component {
 }
 
 
-class ImageWithStatusText extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { imageStatus: null };
+ class LazyLd extends React.Component {
+    constructor(){
+        super();
+        this.state = {
+            done : false
+        }
     }
-   
-    handleImageLoaded() {
-      this.setState({ imageStatus: 'loaded' });
+    componentWillMount(){
+        // 创建一个虚拟图片
+        const img = new Image();
+        // 发出请求，请求图片
+        img.src = this.props.src;
+        // 当图片加载完毕
+        img.onload = () => {
+            this.setState({
+               done : true
+            });
+        }
     }
-   
-    handleImageErrored() {
-      this.setState({ imageStatus: 'failed to load' });
-    }
-   
     render() {
-      return (
-        <div>
-          <img
-            src={this.props.loading.gif}
-            onLoad={this.handleImageLoaded.bind(this)}
-            onError={this.handleImageErrored.bind(this)}
-            />
-          {this.state.imageStatus}
-        </div>
-      );
+        return (
+            <div>
+                 {
+                        this.state.done
+                        ?
+                        <img style={{
+                            'width': this.props.width + 'px',
+                            'height': this.props.height + 'px'
+                        }} src={this.props.src} />
+                        :
+                        <img style={{
+                            'width': this.props.width + 'px',
+                            'height': this.props.height + 'px'
+                        }} src= "https://img.devrant.com/devrant/rant/r_228415_fDWmt.gif"/>
+                }
+            </div>
+        )
     }
-  }
+}
 
 
 
@@ -80,18 +98,7 @@ class Content extends React.Component {
     };
 
     search = async () => {
-        function GetQueryString(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-            var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配
-            var context = "";
-            if (r != null)
-                context = r[2];
-            reg = null;
-            r = null;
-            return context == null || context == "" || context == "undefined" ? "" : context;
-        }
-        console.log(GetQueryString("q"));
-        const q = GetQueryString("q");
+        var q = window.location.search.split("=").slice(1).toString();
         const url = `https://api.github.com/search/repositories?q=stars:>1+language:${q}&sort=stars&order=desc&type=Repositories`;
         console.log('url', url);
         this.setState({ loading: true })
@@ -112,7 +119,13 @@ class Content extends React.Component {
         const cards = this.state.items.slice(0, 10).map((item, key) => {
             return <div className="card" ><div className='it' key={item.id}>
                 <div className="num">#{key + 1}</div>
-                <div className="img"><img src={item.owner.avatar_url} style={{ width: '150px', height: '150px',}} /></div>
+                <div className="img">
+                {
+                 <LazyLd width = {150} height = {150} src={item.owner.avatar_url}></LazyLd>
+                }
+                    {/* <img src={item.owner.avatar_url} style={{ width: '150px', height: '150px',}} /> */} 
+                    {/* 无占位图 */}
+                </div>
                 <div className="name"><a href={item.html_url}>{item.name}</a></div>
                 <div className="desc">
                     <div>

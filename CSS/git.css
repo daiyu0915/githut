@@ -12,7 +12,6 @@ font-weight: bolder;
 font-size: 22px;
 }
 
-
 .content {
     display: flex;
     justify-content: space-around;
@@ -106,13 +105,20 @@ text-align: center;
 .load{
     text-align: 'center';
 }
-.img img{
+/* .img img{
     
     position:relative;
     background-color:white!important;
     background: url(./loading.gif) 50% no-repeat;
    
-  }
+  } */
+
+
+
+
+
+
+
   /* .img img:after{
 
     content: "";
