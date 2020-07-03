@@ -18,7 +18,7 @@ class Menu extends React.Component {
         
         
         const list = links.map((item, key) =>
-            <div  key={key} ><a href={`/?q=${item.query}`} style={{color:r == item.query ? 'red':'black'}} >{item.title}</a></div>
+            <div  key={key} ><a href={`/githut/?q=${item.query}`} style={{color:r == item.query ? 'red':'black'}} >{item.title}</a></div>
         );
         return <ul id="headbar">
             {list}
